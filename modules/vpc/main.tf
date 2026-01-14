@@ -101,12 +101,13 @@ resource "aws_nat_gateway" "nat_gw" {
     }
 }
 
+    resource "aws_eip" "nat_eip" {
+        domain = "vpc"
+        tags = {
+            Name = "${var.vpc_name}-nat-eip"
+        }
 
-resource "aws_eip" "nat_eip" {
-    tags = {
-        Name = "${var.vpc_name}-nat-eip"
     }
-  
 }
 resource "aws_route_table_association" "private_rt_assoc" {
     count = length(aws_subnet.private_subnet)
