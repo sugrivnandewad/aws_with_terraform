@@ -1,12 +1,17 @@
-# VPC module - variables.tf
-# Declare input variables for the VPC module
-region "vpc" {
-  description = "The region where the VPC will be created"
+variable "region" {
+  description = "AWS region"
   type        = string
   default     = "ap-south-1"
 }
-vpc_cidr "vpc" {
-  description = "The CIDR block for the VPC"
+
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
   type        = string
-  default     = "10.167.0.0/16"
+  default     = "10.0.0.0/16"
+}
+
+variable "vpc_name" {
+  description = "Name of the VPC"
+  type        = string
+  default     = "my-vpc"
 }
