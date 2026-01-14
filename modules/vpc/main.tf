@@ -85,7 +85,7 @@ resource "aws_route" "private_route" {
 }
 
 resource "aws_nat_gateway" "nat_gw" {
-    allocation_id = aws_eip.nat_eip.id
+    allocation_id = aws_eip.nat_eip.allocation_id
     subnet_id = aws_subnet.public_subnet[0].id
     tags = {
         Name = "${var.vpc_name}-nat-gw"
