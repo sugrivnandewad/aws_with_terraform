@@ -79,20 +79,31 @@ resource "aws_route_table" "private_rt" {
 }
 
 resource "aws_route" "private_route" {
-    route_table_id = aws_route_table.private_rt.id
+    route_table_id         = aws_route_table.private_rt.id
     destination_cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gw.id
+    nat_gateway_id         = aws_nat_gateway.nat_gw.id
+
+    depends_on = [
+        aws_nat_gateway.nat_gw
+    ]
 }
 
 resource "aws_nat_gateway" "nat_gw" {
     allocation_id = aws_eip.nat_eip.allocation_id
-    subnet_id = aws_subnet.public_subnet[0].id
+    subnet_id     = aws_subnet.public_subnet[0].id
+
+    depends_on = [
+        aws_internet_gateway.my-igw
+    ]
+
     tags = {
         Name = "${var.vpc_name}-nat-gw"
     }
-  
 }
+
+
 resource "aws_eip" "nat_eip" {
+    vpc = true
     tags = {
         Name = "${var.vpc_name}-nat-eip"
     }
