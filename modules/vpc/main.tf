@@ -13,8 +13,9 @@ resource "aws_vpc" "main" {
 }
 
 data "aws_availability_zones" "available" {
-  state = available
+  state = "available"
 }
+
 
 resource "aws_subnet" "public_subnet" {
     count = length(data.aws_availability_zones.available.names)
