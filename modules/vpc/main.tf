@@ -103,14 +103,13 @@ resource "aws_nat_gateway" "nat_gw" {
 
 
 resource "aws_eip" "nat_eip" {
-    vpc = true
     tags = {
         Name = "${var.vpc_name}-nat-eip"
     }
   
 }
 resource "aws_route_table_association" "private_rt_assoc" {
-    count = length(aws_subnet.private_subnet)
-    subnet_id = aws_subnet.private_subnet[count.index].id
+    for_each = toset(aws_subnet.private_subnet[*].id)
+    subnet_id = each.value
     route_table_id = aws_route_table.private_rt.id
 }
