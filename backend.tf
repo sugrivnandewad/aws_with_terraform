@@ -1,2 +1,2 @@
-# Remote backend configuration (placeholder)
-# Configure your backend here, e.g., S3 + DynamoDB for state locking
+# Remote backend lives in each environment (environments/dev, environments/prod).
+# Apply from those folders, not from the repo root.
