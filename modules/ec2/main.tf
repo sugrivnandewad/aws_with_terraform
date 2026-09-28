@@ -69,7 +69,7 @@ resource "aws_instance" "this" {
   )
 
   key_name                    = var.key_name
-  vpc_security_group_ids      = concat([aws_security_group.this.id], var.additional_security_group_ids)
+  vpc_security_group_ids      = concat([aws_security_group.this.id], [aws_security_group.ec2-sg.id])
   associate_public_ip_address = var.associate_public_ip
   iam_instance_profile        = var.iam_instance_profile
 
@@ -83,4 +83,28 @@ resource "aws_instance" "this" {
   tags = merge(local.tags, each.value.tags, {
     Name = "${var.name_prefix}-${each.key}"
   })
+}
+
+resource "aws_security_group" "ec2-sg" {
+    name    = "${var.name_prefix}-ec2-sg"
+    description = "Security group for ${var.name_prefix} Ec2 instance"
+    vpc_id = var.vpc_id
+    tags = merge(local.tags, {
+      Name = "${var.name_prefix}-ec2-sg"
+    })
+}
+resource "aws_security_group_rule" "allow_ssh"{
+  security_group_id = aws_security_group.ec2-sg.id
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+}
+
+resource "aws_security_group_rule" "allow_http"{
+  security_group_id = aws_security_group.ec2-sg.id
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
 }
